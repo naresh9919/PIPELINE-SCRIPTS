@@ -1,0 +1,93 @@
+Build Java Project using Maven in Jenkins Pipeline
+
+
+Prerequisites
+
+Preinstalled Jenkins with Admin Access
+Installed JDK
+Installed Maven
+GitHub Repository
+
+What is Jenkins Pipeline ?
+
+Jenkins Pipeline is a combination of Plugins which automates number of tasks and makes the CI/CD pipeline efficient, high in quality and reliable.
+
+What is Jenkinsfile ?
+
+Jenkinsfile is nothing but a simple text file which is used to write the Jenkins Pipeline and to automate the Continuous Integration process.
+
+Jenkinsfile works as a “Pipeline as a Code”.
+
+Jenkinsfile is written in couple of way
+
+Declarative pipeline syntax
+Scripted pipeline syntax
+
+#1: Login to Jenkins
+#2. Install GitHub Integration and Maven Plugins in Jenkins
+     GitHub Integration Plugin
+     Maven Integration Plugin
+
+
+Navigate to Dashboard->> Manage Jenkins ->> Manage Plugin
+
+Now search for “GitHub Integration Plugin” and click on Download now and install after restart.
+
+
+#3. Global Tool configuration in Jenkins
+Now we will configure System by adding JDK and Maven installation in Jenkins.
+
+Navigate to Dashboard->> Manage Jenkins->> Global tool Configuration
+
+Click on JDK->> Add JDK, Give a JDK name and provide your JAVA_HOME path where the JDK is present.
+
+Now below click on Maven->> Add Maven, We can provide our Installed Maven path or we can also use Jenkins default one.In this case we are using Jenkins default Maven version.
+Click on apply and save.
+
+#4. Create Pipeline Job in Jenkins
+
+“New Item” -->  “Pipeline”, Click OK
+
+#5. Enter Project details in Jenkins Pipeline
+Now we will set the Build Triggers, Select Build whenever a SNAPSHOT and GitHub hook trigger for GITScm polling as triggers.
+
+#6. Jenkinsfile to Build Java Project using Maven in Jenkins Pipeline
+
+pipeline {
+    agent any
+    tools {
+        maven "MAVEN"
+        jdk "JDK"
+    }
+    stages {
+        stage('Initialize'){
+            steps{
+                echo "PATH = ${M2_HOME}/bin:${PATH}"
+                echo "M2_HOME = /opt/maven"
+            }
+        }
+        stage('Build') {
+            steps {
+                dir("/var/lib/jenkins/workspace/demopipelinetask/my-app") {
+                sh 'mvn -B -DskipTests clean package'
+                }
+            }
+        }
+     }
+    post {
+       always {
+          junit(
+        allowEmptyResults: true,
+        testResults: '*/test-reports/.xml'
+      )
+      }
+   } 
+}
+
+
+
+Note- Replace and add your workspace path in dir.
+
+#7. Build Java Project using Maven in Jenkins Pipeline
+ Build Now
+
