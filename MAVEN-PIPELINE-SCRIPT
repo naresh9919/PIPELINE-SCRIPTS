@@ -53,36 +53,25 @@ Now we will set the Build Triggers, Select Build whenever a SNAPSHOT and GitHub 
 
 #6. Jenkinsfile to Build Java Project using Maven in Jenkins Pipeline
 
+
 pipeline {
     agent any
-    tools {
-        maven "MAVEN"
-        jdk "JDK"
+    environment {
+        PATH = "/opt/maven/bin:$PATH"
     }
     stages {
-        stage('Initialize'){
-            steps{
-                echo "PATH = ${M2_HOME}/bin:${PATH}"
-                echo "M2_HOME = /opt/maven"
-            }
-        }
-        stage('Build') {
+        stage("git"){
             steps {
-                dir("/var/lib/jenkins/workspace/demopipelinetask/my-app") {
-                sh 'mvn -B -DskipTests clean package'
-                }
+             git credentialsId: 'git-credentials', url: 'https://github.com/naresh9919/war-file--tomcat.git'
             }
         }
-     }
-    post {
-       always {
-          junit(
-        allowEmptyResults: true,
-        testResults: '*/test-reports/.xml'
-      )
-      }
-   } 
-}
+        stage("build code"){
+            steps {
+                sh "mvn clean install"
+            }
+        }
+    }
+    }
 
 
 
