@@ -22,6 +22,22 @@ Steps:
 
 10. Find below jenkins declarative file
 
+install deploy to container puggin
+
+Go to Jenkins  new item  Enter an item name  pipelineok
+
+Description  pipeline script from SCMGitpaste URLcredentialsmaster
+
+Pipeline syntaxsample stepdeploy:Deploy war/ear to a container
+
+WAR/EAR files : **/*.war
+
+Contest path :
+
+Add containertomcat7.x Remote credentials tomcat credentialstomcat URLGenerate pipeline script
+copy the script and paste on Jenkinsfile.
+
+
 
 
 pipeline {
